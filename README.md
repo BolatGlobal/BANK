@@ -39,6 +39,6 @@ npm run build
 
 Built with Next.js 15 App Router, TypeScript, Tailwind CSS, and Lucide React. State is local to the current browser tab and intentionally resets on page refresh. Telemetry is generated locally every 2.3 seconds and bounded to 60 entries; no runtime external services or fonts are used. API timing labels and threat timestamps are simulated GST scenario values, not wall-clock time.
 
-The initial KPI is the requested **14 / 16**. There are three additional discovery findings; after all three fixes it becomes **17 / 17** rather than silently dropping or capping a remediation. Compliance exposure is a synthetic sum (AED 5.4M + AED 4.1M + AED 3.0M), not a regulatory assessment.
+The initial KPI is the requested **14 / 16** baseline with two known gaps. Opening the graph performs the demo discovery scan, adding one newly discovered risk and updating the shared KPI to **14 / 17**. Each verified fix then advances it to **15 / 17**, **16 / 17**, and **17 / 17**; switching tabs preserves that scope. Reset Demo restores the original baseline. Compliance exposure is a synthetic sum (AED 5.4M + AED 4.1M + AED 3.0M), not a regulatory assessment. Green graph assets mean no discovery finding or a verified remediation, independent of runtime vault controls on Live SOC.
 
 This is a polished product demonstration, not a production enforcement gateway. The displayed patch is illustrative code and the approval button never calls GitHub. PII strings are fabricated; no personal records or genuine secrets are stored.

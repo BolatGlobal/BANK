@@ -32,6 +32,24 @@ test("each remediation removes only its own exposure and increases the eliminate
   assert.equal(eliminatedCount(state), 17, "all three findings count, even beyond the original 16-risk baseline");
 });
 
+test("exposure stays accurate in every completion order, including concurrent fixes", () => {
+  for (const first of risks) for (const second of risks) {
+    if (first.id === second.id) continue;
+    const third = risks.find(risk => risk.id !== first.id && risk.id !== second.id)!;
+    const state = initialRisks();
+    for (const risk of risks) state[risk.id] = "fixing";
+    let expected = 12500000;
+    assert.equal(remainingExposure(state), expected, "unverified fixes retain exposure");
+    for (const [index, risk] of [first, second, third].entries()) {
+      state[risk.id] = "secured";
+      expected -= risk.exposure;
+      assert.equal(remainingExposure(state), expected);
+      assert.equal(eliminatedCount(state), 15 + index);
+    }
+    assert.equal(remainingExposure(state), 0);
+  }
+});
+
 test("fresh default state is isolated and safe for repeat demos", () => {
   const first = initialControls();
   first.customers_pii.masking = false;

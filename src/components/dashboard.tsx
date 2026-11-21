@@ -28,6 +28,7 @@ function CodeDiff({ compact = false }: { compact?: boolean }) {
 
 export default function Dashboard() {
   const [tab, setTab] = useState<"soc" | "graph">("soc");
+  const [discoveryScanned, setDiscoveryScanned] = useState(false);
   const [controls, setControls] = useState(initialControls);
   const [selectedVault, setSelectedVault] = useState<VaultId>("customers_pii");
   const [traffic, setTraffic] = useState(initialTraffic);
@@ -127,6 +128,7 @@ export default function Dashboard() {
   }
 
   function reset() {
+    setDiscoveryScanned(false);
     timers.current.forEach(clearTimeout);
     timers.current = [];
     setControls(initialControls()); setSelectedVault("customers_pii"); setTraffic(initialTraffic()); setPaused(false); setQuery(""); setBlockedOnly(false); setPhase("nominal"); setRiskState(initialRisks()); setSelectedRisk("shadow"); setInspection(null); setModal(null); setTab("soc"); sequence.current = 15;
@@ -137,6 +139,13 @@ export default function Dashboard() {
   const filteredTraffic = traffic.filter(row => (!blockedOnly || row.status === "BLOCKED") && `${row.path} ${row.partner} ${row.method}`.toLowerCase().includes(query.toLowerCase()));
   const control = controls[selectedVault];
   const activeThreat = phaseBusy;
+  const openFindings = Object.values(riskState).filter(status => status !== "secured").length;
+  const trackedRisks = discoveryScanned ? 14 + risks.length : 16;
+
+  function selectTab(next: "soc" | "graph") {
+    setTab(next);
+    if (next === "graph") setDiscoveryScanned(true);
+  }
 
   return <div className="app-shell">
     <header className="topbar">
@@ -144,17 +153,17 @@ export default function Dashboard() {
       <div className="topbar-right"><span className="environment"><span className="live-dot" />PRODUCTION SANDBOX<ChevronDown size={12} /></span><span className="topbar-divider" /><button className="icon-button notification" aria-label="Open audit log" onClick={() => setModal("audit")}><Bell size={18} /><i /></button><button className="avatar" onClick={() => setModal("about")} aria-label="About the bank workspace">BA</button></div>
     </header>
 
-    <aside className="side-rail" aria-label="Workspace navigation"><div className="rail-main"><button title="Live SOC & API Airlock" aria-label="Live SOC & API Airlock" className={tab === "soc" ? "active" : ""} onClick={() => setTab("soc")}><ShieldEllipsis size={21} /></button><button title="Shadow Data & API Graph" aria-label="Shadow Data & API Graph" className={tab === "graph" ? "active" : ""} onClick={() => setTab("graph")}><Network size={21} /></button><button title="Audit log" aria-label="Audit log" onClick={() => setModal("audit")}><Layers3 size={21} /></button></div><div className="rail-bottom"><button title="About this demo" aria-label="About this demo" onClick={() => setModal("about")}><CircleHelp size={21} /></button><span className="rail-avatar">B</span></div></aside>
+    <aside className="side-rail" aria-label="Workspace navigation"><div className="rail-main"><button title="Live SOC & API Airlock" aria-label="Live SOC & API Airlock" className={tab === "soc" ? "active" : ""} onClick={() => selectTab("soc")}><ShieldEllipsis size={21} /></button><button title="Shadow Data & API Graph" aria-label="Shadow Data & API Graph" className={tab === "graph" ? "active" : ""} onClick={() => selectTab("graph")}><Network size={21} /></button><button title="Audit log" aria-label="Audit log" onClick={() => setModal("audit")}><Layers3 size={21} /></button></div><div className="rail-bottom"><button title="About this demo" aria-label="About this demo" onClick={() => setModal("about")}><CircleHelp size={21} /></button><span className="rail-avatar">B</span></div></aside>
 
     <main className="workspace">
       <section className="page-heading"><div><div className="eyebrow">SECURITY OPERATIONS <ChevronRight size={11} /> COMMAND CENTER</div><h1>Your perimeter. <span>Under control.</span></h1><p>One clear view of your bank’s APIs, data, and autonomous defense.</p></div><div className="heading-actions"><button className="button subtle" onClick={reset}><RotateCcw size={14} />Reset Demo</button><button className="button danger" onClick={simulate} disabled={phaseBusy}><Zap size={15} fill="currentColor" />{phaseBusy ? "Breach simulation active" : "Simulate 02:00 AM Breach"}</button></div></section>
 
-      <div className="view-bar"><nav className="view-tabs" aria-label="Command center views"><button className={tab === "soc" ? "selected" : ""} onClick={() => setTab("soc")}><Radio size={16} /><span className="tab-number">1.</span> Live SOC & API Airlock</button><button className={tab === "graph" ? "selected" : ""} onClick={() => setTab("graph")}><Network size={16} /><span className="tab-number">2.</span> Shadow Data & API Graph<em>3</em></button></nav><span className="workspace-status"><span className={`live-dot ${activeThreat ? "red-dot" : ""}`} />{activeThreat ? "Incident contained · investigating" : "All systems operational"}<span className="region">UAE NORTH</span></span></div>
+      <div className="view-bar"><nav className="view-tabs" aria-label="Command center views"><button className={tab === "soc" ? "selected" : ""} onClick={() => selectTab("soc")}><Radio size={16} /><span className="tab-number">1.</span> Live SOC & API Airlock</button><button className={tab === "graph" ? "selected" : ""} onClick={() => selectTab("graph")}><Network size={16} /><span className="tab-number">2.</span> Shadow Data & API Graph<em aria-label={`${openFindings} unresolved findings`}>{openFindings}</em></button></nav><span className="workspace-status"><span className={`live-dot ${activeThreat ? "red-dot" : ""}`} />{activeThreat ? "Incident contained · investigating" : "All systems operational"}<span className="region">UAE NORTH</span></span></div>
 
       <section className="kpi-grid" aria-label="Live banking protection metrics">
         <article className="kpi"><div className="kpi-label"><Wallet size={14} />Protected Banking Assets<ShieldCheck size={13} className="kpi-corner" /></div><div className="kpi-value">$1.42<span>B</span><Sparkline /></div><div className="kpi-note"><span><ArrowUpRight size={12} />100% protected</span><small>across all payment rails</small></div></article>
         <article className="kpi"><div className="kpi-label"><Fingerprint size={14} />Customer PII Records Shielded</div><div className={`kpi-value ${protectedRecords < 2480910 ? "warning-text" : ""}`}>{protectedRecords.toLocaleString("en-US")}<Sparkline variant={1} /></div><div className="kpi-note"><span><LockKeyhole size={11} />{protectedRecords === 2480910 ? "Zero data exposure" : "Protection policies changed"}</span><small>real-time masking</small></div></article>
-        <article className="kpi"><div className="kpi-label"><Network size={14} />Shadow APIs / Risks Eliminated</div><div className="kpi-value">{eliminatedCount(riskState)}<span className="kpi-denominator"> / {Math.max(16, eliminatedCount(riskState))}</span><Sparkline variant={2} /></div><div className="kpi-note"><span className={eliminatedCount(riskState) >= 16 ? "" : "amber-text"}><span className="tiny-dot" />{Object.values(riskState).filter(v => v !== "secured").length} findings to review</span><small>continuous discovery</small></div></article>
+        <article className="kpi"><div className="kpi-label"><Network size={14} />Shadow APIs / Risks Eliminated</div><div className="kpi-value">{eliminatedCount(riskState)}<span className="kpi-denominator"> / {trackedRisks}</span><Sparkline variant={2} /></div><div className="kpi-note"><span className={openFindings === 0 ? "" : "amber-text"}><span className="tiny-dot" />{discoveryScanned ? `${openFindings} findings to review` : "2 known gaps"}</span><small>{discoveryScanned ? "1 new risk discovered" : "graph scan available"}</small></div></article>
         <article className="kpi"><div className="kpi-label"><GitPullRequest size={14} />Mean Time to Patch (Devin AI)</div><div className="kpi-value">34<span className="kpi-unit">sec</span><Sparkline variant={3} /></div><div className="kpi-note"><span><ArrowDownLeft size={12} />96.2% faster</span><small>vs. manual remediation</small></div></article>
       </section>
 
