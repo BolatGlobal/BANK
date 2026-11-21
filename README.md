@@ -41,6 +41,6 @@ Built with Next.js 15 App Router, TypeScript, Tailwind CSS, and Lucide React. St
 
 The initial KPI is the requested **14 / 16**. There are three additional discovery findings; after all three fixes it becomes **17 / 17** rather than silently dropping or capping a remediation. Compliance exposure is a synthetic sum (AED 5.4M + AED 4.1M + AED 3.0M), not a regulatory assessment.
 
-Displayed exposure is an illustrative scenario, not a regulatory or loss assessment. AED 1.42B is a synthetic portfolio amount, not a currency conversion or connected balance. The 34-second patch time, 14ms containment and confidence scores are scripted values, not measured benchmarks. Named UAE ecosystem entities in the traffic feed are illustrative, not connected integrations or endorsements.
+Displayed exposure is an illustrative scenario, not a regulatory or loss assessment. The $1.42B KPI is a synthetic USD portfolio value from the demo brief, not a connected balance; scenario transfer and exposure amounts are labelled separately in AED. The 34-second patch time, 14ms containment and confidence scores are scripted values, not measured benchmarks. Named UAE ecosystem entities in the traffic feed are illustrative, not connected integrations or endorsements.
 
 This is a polished product demonstration, not a production enforcement gateway. The displayed patch is illustrative code and the approval button never calls GitHub. PII strings are fabricated; no personal records or genuine secrets are stored.
