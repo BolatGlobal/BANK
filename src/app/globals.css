@@ -538,16 +538,16 @@ h1 span { color: var(--text-muted); }
   .graph-insight { padding: 12px; margin-bottom: 14px; }
   .graph-insight small { font-size: 12px; max-width: none; }
   .graph-insight strong { font-size: 15px; }
-  .exposure-card { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 14px 18px; }
+  .exposure-card { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 8px 18px; }
   .exposure-card .section-caption, .exposure-progress, .exposure-card > small { grid-column: 1 / -1; }
   .exposure-card .section-caption, .exposure-card > small { font-size: 11px; }
   .exposure-value { margin: 0; }
   .exposure-value span { display: block; margin-left: 0; font-size: 11px; }
   .exposure-card > p { font-size: 12px; line-height: 1.5; margin: 0; align-self: center; }
   .exposure-card > small { margin-top: 0; }
-  .findings-heading { margin: 14px 0 10px; }
+  .findings-heading { margin: 8px 0 10px; }
   .findings-heading h2 { font-size: 16px; }
-  .finding-list { gap: 9px; }
+  .finding-list { gap: 6px; }
   .finding-card { display: grid; grid-template-columns: minmax(0, 1fr) 195px; column-gap: 10px; padding: 10px 14px; }
   .finding-select, .finding-card h3, .finding-target, .finding-card > p, .fix-confirmation { grid-column: 1 / -1; }
   .finding-category, .finding-select .badge, .finding-index { font-size: 11px; }
