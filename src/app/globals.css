@@ -140,8 +140,8 @@ h1 span { color: var(--text-muted); }
 .amber-text, .warning-text { color: var(--amber) !important; }
 .policy-section { padding: 17px 18px; border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
 .section-caption { font-size: 10px; font-family: var(--mono); letter-spacing: .8px; font-weight: 400; color: var(--text-faint); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.policy-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 17px; }
-.policy-row > span { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.policy-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 5px; min-height: 36px; width: 100%; text-align: left; }
+.policy-row > span:first-child { display: flex; align-items: center; gap: 8px; font-size: 12px; }
 .policy-row > span > svg { color: var(--text-faint); }
 .toggle { width: 29px; height: 16px; border-radius: 20px; background: var(--surface-hover); border: 1px solid var(--border); position: relative; flex-shrink: 0; padding: 0; }
 .toggle span { position: absolute; width: 10px; height: 10px; background: var(--text-faint); left: 2px; top: 2px; border-radius: 50%; transition: left .2s; }
@@ -185,7 +185,7 @@ h1 span { color: var(--text-muted); }
 .small-icon:hover, .small-icon.selected { background: var(--surface-hover); color: var(--accent); }
 .stream-head { display: grid; grid-template-columns: minmax(0, 1fr) 37px 57px; padding: 10px 18px; border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); color: var(--text-faint); font-family: var(--mono); font-size: 9px; letter-spacing: .7px; gap: 9px; }
 .stream-head > span:last-child { text-align: right; }
-.traffic-feed { height: 475px; min-height: 0; flex: 0 0 475px; overflow-y: auto; overflow-x: hidden; }
+.traffic-feed { height: 475px; min-height: 0; flex: 0 0 475px; overflow-y: auto; overflow-x: hidden; overflow-anchor: none; }
 .traffic-row { display: grid; grid-template-columns: minmax(0, 1fr) 37px 57px; gap: 9px; align-items: center; padding: 14px 18px; width: 100%; border-bottom: 1px solid var(--border-soft); text-align: left; animation: row-in .3s ease-out; }
 .traffic-row:hover { background: var(--surface-raised); }
 .traffic-row > .badge { margin-left: auto; font-size: 8px; padding: 4px; letter-spacing: .15px; }
@@ -463,6 +463,116 @@ h1 span { color: var(--text-muted); }
   .timeline-item h4 { font-size: 13px; }.timeline-item p { font-size: 12px; }.patch-heading strong { font-size: 12px; }
   .incident-banner strong { font-size: 13px; }.compact pre { font-size: 10px; max-height: 120px; }.merge-button { font-size: 12px; }
 }
+/* Projector layout: keep the complete presenter loop on a 1080p canvas.
+   Smaller screens retain the stacked, naturally scrolling workspace. */
+@media (min-width: 1800px) {
+  .topbar { height: 64px; }
+  .side-rail { top: 64px; }
+  .workspace { padding-top: 20px; }
+  .page-heading { margin-bottom: 18px; }
+  h1 { margin-top: 7px; }
+  .view-bar { margin-bottom: 16px; }
+  .view-tabs button, .button { font-size: 14px; }
+  .kpi { padding: 15px 22px; }
+  .kpi-value { margin: 8px 0; }
+  .kpi-grid { margin-bottom: 18px; }
+  .soc-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.25fr); gap: 18px; }
+  .panel-heading { padding-top: 18px; }
+  .panel h2 { font-size: 16px; }
+  .panel-description { margin-top: 7px; margin-bottom: 14px; }
+  .badge { font-size: 11px; }
+  .section-caption, .payload-label { font-size: 11px; }
+  .vault-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .vault-row { padding: 12px 8px; gap: 6px; }
+  .vault-row strong { font-size: 12px; overflow-wrap: anywhere; }
+  .vault-row small { font-size: 11px; line-height: 1.4; }
+  .vault-icon { display: none; }
+  .policy-section { padding: 16px 18px; }
+  .policy-row { margin-top: 13px; }
+  .policy-row > span { font-size: 14px; }
+  .toggle { width: 36px; height: 21px; }
+  .toggle span { width: 13px; height: 13px; top: 3px; left: 3px; }
+  .toggle.on span { left: 18px; }
+  .payload-section { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 10px; padding: 16px 14px; }
+  .payload-section > .section-caption, .payload-route, .transform-label, .vault-footnote { grid-column: 1 / -1; }
+  .payload-route { margin: 12px 0; font-size: 12px; }
+  .payload-code { grid-column: 1; grid-row: 3; padding: 10px; }
+  .payload-code.output { grid-column: 2; }
+  .payload-label { min-height: 32px; align-items: flex-start; line-height: 1.5; flex-wrap: wrap; }
+  .payload-label .badge { font-size: 10px; }
+  .payload-field > code { font-size: 13px; line-height: 1.6; }
+  .payload-field > span { font-size: 11px; }
+  .transform-label { margin: 12px 0 0; font-size: 11px; }
+  .vault-footnote { font-size: 11px; margin-top: 10px; }
+  .traffic-feed { flex: 1 1 0; min-height: 340px; }
+  .traffic-row { padding-top: 15px; padding-bottom: 15px; }
+  .request-top > code { font-size: 14px; }
+  .request-sub { font-size: 12px; }
+  .traffic-row > .badge, .method, .stream-head { font-size: 10px; }
+  .search { height: 34px; }
+  .search input { font-size: 13px; }
+  .nominal-visual { height: 170px; }
+  .ring-three { width: 160px; height: 160px; }
+  .defense-checks { margin-top: 18px; margin-bottom: 18px; }
+  .simulation-hint { margin-bottom: 16px; }
+  .simulation-hint strong { font-size: 13px; }
+  .simulation-hint small, .response-footer { font-size: 11px; }
+  .incident-content { padding: 14px 16px 0; }
+  .incident-banner strong { font-size: 14px; }
+  .incident-banner > div > span, .incident-banner > .badge { font-size: 11px; }
+  .incident-timeline { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); column-gap: 16px; margin-top: 16px; }
+  .timeline-item { grid-column: 1; padding-left: 16px; padding-bottom: 16px; min-width: 0; }
+  .timeline-item:last-child { grid-column: 2; grid-row: 1 / span 2; }
+  .timeline-meta { flex-wrap: wrap; }
+  .timeline-meta time, .timeline-meta > span:not(.badge), .timeline-meta .badge { font-size: 10px; }
+  .timeline-item h4 { font-size: 14px; }
+  .timeline-item p, .attack-details code { font-size: 12px; }
+  .attack-details { padding: 8px; }
+  .attack-details strong { font-size: 15px; }
+  .attack-details strong small { font-size: 11px; }
+  .honeypot { align-items: flex-start; font-size: 12px; }
+  .honeypot small { font-size: 11px; line-height: 1.5; }
+  .patch-heading { padding: 10px 8px; }
+  .patch-heading > span, .patch-heading strong { font-size: 12px; }
+  .compact .diff-file { font-size: 10px; }
+  .compact pre { font-size: 12px; max-height: 150px; }
+  .merge-button { white-space: normal; font-size: 13px; padding: 11px 6px; }
+  .demo-merge-note { font-size: 10px; line-height: 1.4; }
+  .discovery-grid { grid-template-columns: minmax(0, 1fr) 480px; }
+  .graph-canvas { height: 410px; }
+  .graph-stats { font-size: 13px; padding: 12px 19px; }
+  .graph-stats .graph-scan { font-size: 11px; }
+  .graph-node { min-height: 92px; padding: 10px; }
+  .graph-node-status { font-size: 11px; }
+  .graph-node strong { font-size: 15px; margin-top: 9px; }
+  .graph-node small, .graph-layer-label { font-size: 12px; }
+  .graph-legend { padding-top: 6px; padding-bottom: 16px; font-size: 12px; }
+  .graph-insight { padding: 12px; margin-bottom: 14px; }
+  .graph-insight small { font-size: 12px; max-width: none; }
+  .graph-insight strong { font-size: 15px; }
+  .exposure-card { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 8px 18px; }
+  .exposure-card .section-caption, .exposure-progress, .exposure-card > small { grid-column: 1 / -1; }
+  .exposure-card .section-caption, .exposure-card > small { font-size: 11px; }
+  .exposure-value { margin: 0; }
+  .exposure-value span { display: block; margin-left: 0; font-size: 11px; }
+  .exposure-card > p { font-size: 12px; line-height: 1.5; margin: 0; align-self: center; }
+  .exposure-card > small { margin-top: 0; }
+  .findings-heading { margin: 8px 0 10px; }
+  .findings-heading h2 { font-size: 16px; }
+  .finding-list { gap: 6px; }
+  .finding-card { display: grid; grid-template-columns: minmax(0, 1fr) 195px; column-gap: 10px; padding: 10px 14px; }
+  .finding-select, .finding-card h3, .finding-target, .finding-card > p, .fix-confirmation { grid-column: 1 / -1; }
+  .finding-category, .finding-select .badge, .finding-index { font-size: 11px; }
+  .finding-card h3 { font-size: 15px; margin-top: 6px; margin-bottom: 3px; }
+  .finding-target { font-size: 12px; }
+  .finding-card > p { font-size: 12px; line-height: 1.5; margin: 5px 0; }
+  .finding-exposure { margin-top: 7px; min-height: 36px; grid-column: 1; }
+  .finding-exposure > span:first-child { font-size: 12px; }
+  .finding-node { display: none; }
+  .fix-button { grid-column: 2; align-self: end; width: 100%; font-size: 13px; margin-top: 7px; }
+  .fix-confirmation { font-size: 11px; }
+  .discovery-note { font-size: 11px; line-height: 1.5; }
+}
 @media (max-width: 1279px) {
   .workspace { padding: 24px 20px 0; margin-left: 59px; }.side-rail { width: 59px; padding-left: 7px; padding-right: 7px; }
   .soc-grid { grid-template-columns: minmax(240px, .9fr) minmax(320px, 1.35fr); gap: 15px; }
@@ -504,6 +614,15 @@ h1 span { color: var(--text-muted); }
   .workspace-footer { flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 0 24px; font-size: 9px; }.demo-indicator { font-size: 8px; }.workspace-footer > span:first-child { flex-wrap: wrap; line-height: 1.8; }
   .topology-panel .panel-description { font-size: 11px; }.topology-panel .badge { font-size: 5px; }.graph-stats { gap: 14px; font-size: 9px; padding: 14px; }.graph-canvas { min-width: 570px; height: 530px; }.graph-node { min-height: 90px; padding: 10px; }.graph-node strong { font-size: 12px; }.graph-node small { font-size: 8px; }.graph-layer-label { font-size: 9px; }.graph-legend { flex-wrap: wrap; font-size: 8px; gap: 12px; padding-top: 0; }.graph-insight { align-items: flex-start; }.graph-insight small { font-size: 10px; }.graph-insight strong { line-height: 1.6; font-size: 13px; }.insight-icon { width: 32px; height: 32px; }.graph-insight { margin-bottom: 15px; padding: 13px; }.discovery-grid { gap: 18px; }.findings-column { display: block; }.findings-heading { margin: 24px 0 15px; }.finding-list { padding-top: 0; gap: 14px; }.exposure-card { padding: 20px; }.exposure-card .section-caption { font-size: 10px; }.exposure-value { font-size: 35px; }.exposure-card > p { font-size: 11px; }.exposure-card > small { font-size: 10px; }.finding-card { padding: 17px; }.finding-card h3 { font-size: 13px; }.finding-category { font-size: 9px; }.finding-target { font-size: 12px; }.finding-card > p { font-size: 13px; }.finding-exposure > span:first-child { font-size: 11px; }.finding-node { font-size: 10px; }.fix-button { font-size: 13px; padding: 12px; }.finding-select .badge { font-size: 9px; }.fix-confirmation { font-size: 10px; }.discovery-note { font-size: 10px; }
   .dialog { padding: 22px; }.modal-backdrop { padding: 15px; }.dialog-header h2 { font-size: 20px; }.dialog-description { font-size: 13px; }.inspection-drawer { width: 100%; padding: 25px 20px; }.inspect-endpoint > code { font-size: 11px; }.inspect-endpoint { padding-left: 8px; padding-right: 8px; gap: 4px; }.inspect-endpoint > .badge { font-size: 8px; }.inspection-check { gap: 8px; }.inspection-check small { font-size: 10px; }.inspection-check strong { font-size: 12px; }.patch-branch { font-size: 9px; gap: 5px; }.code-diff pre { font-size: 10px; }.patch-checks { font-size: 10px; }.toast { width: max-content; font-size: 12px; padding: 13px; line-height: 1.6; bottom: 17px; }.toast > button { margin-left: 3px; }.patch-modal-title { font-size: 15px; }
+}
+@media (max-width: 380px) {
+  .view-tabs { gap: 12px; }
+  .view-tabs button { flex: 1; min-width: 0; white-space: normal; text-align: left; line-height: 1.5; }
+  .view-tabs button > svg { flex-shrink: 0; }
+  .kpi-label { white-space: normal; min-height: 27px; line-height: 1.5; align-items: flex-start; }
+  .kpi-label > svg { flex-shrink: 0; margin-top: 2px; }
+  .kpi-value { font-size: 24px; }
+  .kpi .sparkline { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }

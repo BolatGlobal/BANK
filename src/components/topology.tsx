@@ -71,9 +71,10 @@ export default function Topology({ riskState, selectedRisk, onSelect, onFix }: P
 
     <aside className="findings-column">
       <div className={`exposure-card ${allSecured ? "all-secured" : ""}`}>
-        <div className="section-caption"><span>{allSecured ? "EXPOSURE ELIMINATED" : "ESTIMATED COMPLIANCE EXPOSURE"}</span>{allSecured ? <ShieldCheck size={16} /> : <TriangleAlert size={16} />}</div>
-        <div className="exposure-value" aria-live="polite">{aed(remainingExposure(riskState))}<span>{allSecured ? "No open exposure" : "at risk"}</span></div>
-        <p>{allSecured ? "Every discovered security gap has been closed." : `Across ${open} unresolved security gap${open === 1 ? "" : "s"} · synthetic estimate`}</p>
+        <div className="section-caption"><span>{allSecured ? "SCENARIO FINDINGS CLOSED" : "ILLUSTRATIVE SCENARIO EXPOSURE"}</span>{allSecured ? <ShieldCheck size={16} /> : <TriangleAlert size={16} />}</div>
+        <div className="exposure-value" aria-live="polite">{aed(remainingExposure(riskState))}<span>{allSecured ? "No open scenario exposure" : "at risk"}</span></div>
+        <p>{allSecured ? "Every discovered security gap has been closed." : `Across ${open} unresolved security gap${open === 1 ? "" : "s"}`}</p>
+        <p>Synthetic values · not a regulatory or loss assessment</p>
         <div className="exposure-progress"><span style={{ width: `${((risks.length - open) / risks.length) * 100}%` }} /></div><small>{risks.length - open} of {risks.length} findings remediated<ShieldCheck size={12} /></small>
       </div>
       <div className="findings-heading"><h2>Discovered security gaps</h2><span className="badge neutral">{open} OPEN</span></div>
