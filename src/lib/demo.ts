@@ -4,8 +4,8 @@ export type Traffic = { id: number; time: string; method: "GET" | "POST"; path: 
 
 export const vaults = [
   { id: "customers_pii", fields: "Emirates ID, IBAN, Phone", records: 1842910, label: "Customer records" },
-  { id: "kyc_biometrics", fields: "FaceID hashes, Video KYC", records: 426000, label: "Biometric identities" },
-  { id: "corporate_treasury", fields: "SWIFT codes, Wire keys", records: 84000, label: "Treasury credentials" },
+  { id: "kyc_biometrics", fields: "Biometric references, Video KYC", records: 426000, label: "Biometric identities" },
+  { id: "corporate_treasury", fields: "SWIFT BICs, Signing keys", records: 84000, label: "Treasury data & credentials" },
   { id: "partner_api_tokens", fields: "API keys, OAuth tokens", records: 128000, label: "Partner credentials" },
 ] as const;
 export type VaultId = (typeof vaults)[number]["id"];
@@ -18,13 +18,13 @@ export const payloads: Record<VaultId, { key: string; raw: string; masked: strin
     { key: "phone", raw: "+971 50 123 4567", masked: "+971 ** *** 4567" },
   ],
   kyc_biometrics: [
-    { key: "face_id_hash", raw: "face_demo_8fa4c291d0", masked: "face_************" },
+    { key: "biometric_template_ref", raw: "face_demo_8fa4c291d0", masked: "face_************" },
     { key: "video_kyc", raw: "kyc/demo/customer_0291.mp4", masked: "kyc/****/********.mp4" },
     { key: "verification", raw: "verified_customer_0291", masked: "verified_********" },
   ],
   corporate_treasury: [
     { key: "swift_code", raw: "EBILAEADXXX", masked: "EBIL****XXX" },
-    { key: "wire_key", raw: "demo_wire_treasury_0192", masked: "demo_wire_********" },
+    { key: "signing_key", raw: "demo_signing_treasury_0192", masked: "demo_signing_********" },
     { key: "account", raw: "CORP-TREASURY-920184", masked: "CORP-********-****84" },
   ],
   partner_api_tokens: [
@@ -56,9 +56,9 @@ export function makeTraffic(id: number): Traffic {
 export const initialTraffic = () => Array.from({ length: 14 }, (_, i) => makeTraffic(14 - i));
 
 export const risks = [
-  { id: "shadow", title: "Undocumented KYC endpoint", category: "SHADOW API", severity: "Critical", target: "/api/internal/v1/kyc-export", description: "An unregistered export route exposes unencrypted customer PII outside the API gateway.", exposure: 5400000, fix: "Register route, enforce tenant authorization, and redact PII.", node: "KYC service", icon: "api" },
-  { id: "partner", title: "Over-privileged partner token", category: "EXCESSIVE ACCESS", severity: "High", target: "FinTech_Partner_X", description: "A partner credential has unrestricted read access and cross-tenant wire permissions.", exposure: 4100000, fix: "Rotate credential and constrain scopes to approved tenants.", node: "Partner API", icon: "key" },
-  { id: "bucket", title: "Unmasked KYC backup bucket", category: "DATA EXPOSURE", severity: "High", target: "s3://aegis-kyc-backup", description: "Biometric backups are readable without field-level encryption or a private access policy.", exposure: 3000000, fix: "Enforce private access, encryption, and automated PII masking.", node: "KYC backup", icon: "bucket" },
+  { id: "shadow", title: "Undocumented KYC endpoint", category: "SHADOW API", severity: "Critical", target: "/api/internal/v1/kyc-export", description: "An unregistered export route exposes unencrypted customer PII outside the API gateway.", exposure: 5400000, fix: "Route registered; tenant authorization enforced; PII redacted.", node: "KYC service", icon: "api" },
+  { id: "partner", title: "Over-privileged partner token", category: "EXCESSIVE ACCESS", severity: "High", target: "FinTech_Partner_X", description: "A partner credential has unrestricted read access and cross-tenant wire permissions.", exposure: 4100000, fix: "Credential rotated; scopes constrained to approved tenants.", node: "Partner API", icon: "key" },
+  { id: "bucket", title: "Overexposed KYC backup bucket", category: "DATA EXPOSURE", severity: "High", target: "s3://aegis-kyc-backup", description: "KYC backups permit overly broad read access to sensitive customer data.", exposure: 3000000, fix: "Private access, encryption, and least-privilege read permissions enforced.", node: "KYC backup", icon: "bucket" },
 ] as const;
 export type RiskId = (typeof risks)[number]["id"];
 export type RiskStatus = "open" | "fixing" | "secured";
