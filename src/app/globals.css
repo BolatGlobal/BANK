@@ -451,6 +451,112 @@ h1 span { color: var(--text-muted); }
   .timeline-item h4 { font-size: 13px; }.timeline-item p { font-size: 12px; }.patch-heading strong { font-size: 12px; }
   .incident-banner strong { font-size: 13px; }.compact pre { font-size: 10px; max-height: 120px; }.merge-button { font-size: 12px; }
 }
+/* Projector layout: keep the complete presenter loop on a 1080p canvas.
+   Smaller screens retain the stacked, naturally scrolling workspace. */
+@media (min-width: 1800px) {
+  .topbar { height: 64px; }
+  .side-rail { top: 64px; }
+  .workspace { padding-top: 20px; }
+  .page-heading { margin-bottom: 18px; }
+  h1 { margin-top: 7px; }
+  .view-bar { margin-bottom: 16px; }
+  .view-tabs button, .button { font-size: 14px; }
+  .kpi { padding: 15px 22px; }
+  .kpi-value { margin: 8px 0; }
+  .kpi-grid { margin-bottom: 18px; }
+  .soc-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.25fr); gap: 18px; }
+  .panel-heading { padding-top: 18px; }
+  .panel h2 { font-size: 16px; }
+  .panel-description { margin-top: 7px; margin-bottom: 14px; }
+  .badge { font-size: 11px; }
+  .section-caption, .payload-label { font-size: 11px; }
+  .vault-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .vault-row { padding: 12px 8px; gap: 6px; }
+  .vault-row strong { font-size: 12px; overflow-wrap: anywhere; }
+  .vault-row small { font-size: 11px; line-height: 1.4; }
+  .vault-icon { display: none; }
+  .policy-section { padding: 16px 18px; }
+  .policy-row { margin-top: 13px; }
+  .policy-row > span { font-size: 14px; }
+  .toggle { width: 36px; height: 21px; }
+  .toggle span { width: 13px; height: 13px; top: 3px; left: 3px; }
+  .toggle.on span { left: 18px; }
+  .payload-section { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 10px; padding: 16px 14px; }
+  .payload-section > .section-caption, .payload-route, .transform-label, .vault-footnote { grid-column: 1 / -1; }
+  .payload-route { margin: 12px 0; font-size: 12px; }
+  .payload-code { grid-column: 1; grid-row: 3; padding: 10px; }
+  .payload-code.output { grid-column: 2; }
+  .payload-label { min-height: 32px; align-items: flex-start; line-height: 1.5; flex-wrap: wrap; }
+  .payload-label .badge { font-size: 10px; }
+  .payload-field > code { font-size: 13px; line-height: 1.6; }
+  .payload-field > span { font-size: 11px; }
+  .transform-label { margin: 12px 0 0; font-size: 11px; }
+  .vault-footnote { font-size: 11px; margin-top: 10px; }
+  .traffic-feed { flex: 1 1 0; min-height: 340px; }
+  .traffic-row { padding-top: 15px; padding-bottom: 15px; }
+  .request-top > code { font-size: 14px; }
+  .request-sub { font-size: 12px; }
+  .traffic-row > .badge, .method, .stream-head { font-size: 10px; }
+  .search { height: 34px; }
+  .search input { font-size: 13px; }
+  .nominal-visual { height: 170px; }
+  .ring-three { width: 160px; height: 160px; }
+  .defense-checks { margin-top: 18px; margin-bottom: 18px; }
+  .simulation-hint { margin-bottom: 16px; }
+  .simulation-hint strong { font-size: 13px; }
+  .simulation-hint small, .response-footer { font-size: 11px; }
+  .incident-content { padding: 14px 16px 0; }
+  .incident-banner strong { font-size: 14px; }
+  .incident-banner > div > span, .incident-banner > .badge { font-size: 11px; }
+  .incident-timeline { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); column-gap: 16px; margin-top: 16px; }
+  .timeline-item { grid-column: 1; padding-left: 16px; padding-bottom: 16px; min-width: 0; }
+  .timeline-item:last-child { grid-column: 2; grid-row: 1 / span 2; }
+  .timeline-meta { flex-wrap: wrap; }
+  .timeline-meta time, .timeline-meta > span:not(.badge), .timeline-meta .badge { font-size: 10px; }
+  .timeline-item h4 { font-size: 14px; }
+  .timeline-item p, .attack-details code { font-size: 12px; }
+  .attack-details { padding: 8px; }
+  .attack-details strong { font-size: 15px; }
+  .attack-details strong small { font-size: 11px; }
+  .honeypot { align-items: flex-start; font-size: 12px; }
+  .honeypot small { font-size: 11px; line-height: 1.5; }
+  .patch-heading { padding: 10px 8px; }
+  .patch-heading > span, .patch-heading strong { font-size: 12px; }
+  .compact .diff-file { font-size: 10px; }
+  .compact pre { font-size: 12px; max-height: 150px; }
+  .merge-button { white-space: normal; font-size: 13px; padding: 11px 6px; }
+  .demo-merge-note { font-size: 10px; line-height: 1.4; }
+  .discovery-grid { grid-template-columns: minmax(0, 1fr) 480px; }
+  .graph-canvas { height: 410px; }
+  .graph-stats { font-size: 13px; padding: 12px 19px; }
+  .graph-stats .graph-scan { font-size: 11px; }
+  .graph-node { min-height: 92px; padding: 10px; }
+  .graph-node-status { font-size: 11px; }
+  .graph-node strong { font-size: 15px; margin-top: 9px; }
+  .graph-node small, .graph-layer-label { font-size: 12px; }
+  .graph-legend { padding-top: 6px; padding-bottom: 16px; font-size: 12px; }
+  .graph-insight { padding: 12px; margin-bottom: 14px; }
+  .graph-insight small { font-size: 12px; max-width: none; }
+  .graph-insight strong { font-size: 15px; }
+  .exposure-card { padding: 14px 18px; }
+  .exposure-card .section-caption, .exposure-card > small { font-size: 11px; }
+  .exposure-value { margin: 8px 0; }
+  .exposure-card > p { font-size: 12px; margin-bottom: 10px; }
+  .findings-heading { margin: 14px 0 10px; }
+  .findings-heading h2 { font-size: 16px; }
+  .finding-list { gap: 9px; }
+  .finding-card { position: relative; padding: 12px 14px; }
+  .finding-category, .finding-select .badge, .finding-index { font-size: 11px; }
+  .finding-card h3 { font-size: 15px; margin-top: 9px; margin-bottom: 5px; }
+  .finding-target { font-size: 12px; }
+  .finding-card > p { font-size: 12px; line-height: 1.5; margin: 7px 0; }
+  .finding-exposure { margin-top: 9px; padding-right: 205px; min-height: 36px; }
+  .finding-exposure > span:first-child { font-size: 12px; }
+  .finding-node { display: none; }
+  .fix-button { position: absolute; right: 14px; bottom: 12px; width: 195px; font-size: 13px; margin-top: 0; }
+  .fix-confirmation { font-size: 11px; }
+  .discovery-note { font-size: 11px; line-height: 1.5; }
+}
 @media (max-width: 1279px) {
   .workspace { padding: 24px 20px 0; margin-left: 59px; }.side-rail { width: 59px; padding-left: 7px; padding-right: 7px; }
   .soc-grid { grid-template-columns: minmax(240px, .9fr) minmax(320px, 1.35fr); gap: 15px; }
