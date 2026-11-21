@@ -5,6 +5,7 @@ import { Activity, ArrowDown, ArrowDownLeft, ArrowRight, ArrowUpRight, Bell, Bra
 import { eliminatedCount, initialControls, initialRisks, initialTraffic, makeTraffic, payloads, risks, vaults, visiblePayload, type Phase, type RiskId, type RiskState, type Traffic, type VaultId } from "@/lib/demo";
 import Topology from "./topology";
 import Link from "next/link";
+import { createDemoTimers } from "@/lib/demo-timers";
 
 type Modal = "about" | "audit" | "patch" | null;
 type AuditEvent = { time: string; title: string; detail: string };
@@ -40,8 +41,8 @@ export default function Dashboard() {
   const [inspection, setInspection] = useState<Traffic | null>(null);
   const [modal, setModal] = useState<Modal>(null);
   const [audit, setAudit] = useState<AuditEvent[]>([{ time: "14:32:18", title: "All protection policies synchronized", detail: "Four vaults protected · API gateway healthy · mTLS enforced" }]);
-  const [toast, setToast] = useState("");
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [toast, setToast] = useState<{ message: string } | null>(null);
+  const [timers] = useState(createDemoTimers);
   const sequence = useRef(15);
   const feedRef = useRef<HTMLDivElement>(null);
   const feedAnchor = useRef<{ id: string; top: number } | null>(null);
@@ -74,10 +75,10 @@ export default function Dashboard() {
     if (feed && row && anchor) feed.scrollTop += row.getBoundingClientRect().top - anchor.top;
   }, [traffic]);
 
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => () => timers.clear(), [timers]);
   useEffect(() => {
     if (!toast) return;
-    const timer = setTimeout(() => setToast(""), 3500);
+    const timer = setTimeout(() => setToast(null), 3500);
     return () => clearTimeout(timer);
   }, [toast]);
 
@@ -112,21 +113,21 @@ export default function Dashboard() {
     const exportAttack: Traffic = { ...attack, id: sequence.current++, method: "GET", path: "/v1/customers/export?limit=50000" };
     setTraffic(rows => [attack, exportAttack, ...rows].slice(0, 60));
     log("Threat detected · simulated 99.8% confidence", "Compromised partner credential attempted cross-tenant access. Attempted AED 450,000 offshore wire and 50,000-record PII export.", "02:00:03");
-    timers.current.push(setTimeout(() => {
+    timers.schedule(() => {
       setPhase("airlock");
       log("Airlock engaged in 14ms (simulated)", "AED 450,000 quarantined. Partner token revoked. Synthetic honeypot PII returned; real customer data shielded.", "02:00:03.014");
-    }, 1800));
-    timers.current.push(setTimeout(() => {
+    }, 1800);
+    timers.schedule(() => {
       setPhase("patch");
       log("Devin remediation ready · PR #409", "Tenant isolation and wire velocity checks generated. Awaiting simulated approval.", "02:00:05");
-    }, 4200));
+    }, 4200);
   }
 
   function mergePatch() {
     if (phase !== "patch") return;
     setPhase("resolved");
     setModal(null);
-    setToast("Patch merged. Banking rails restored to PROTECTED.");
+    setToast({ message: "Patch merged. Banking rails restored to PROTECTED." });
     log("PR #409 approved & merged (demo)", "BOLA fixed, strict tenant_id enforced, velocity limits active. No funds or real records lost.", "02:00:37");
   }
 
@@ -134,19 +135,18 @@ export default function Dashboard() {
     if (riskState[id] !== "open") return;
     setRiskState(current => ({ ...current, [id]: "fixing" }));
     log("Devin remediation started", risks.find(r => r.id === id)!.title);
-    timers.current.push(setTimeout(() => {
+    timers.schedule(() => {
       setRiskState(current => ({ ...current, [id]: "secured" }));
       log("Security gap remediated", risks.find(r => r.id === id)!.fix);
-      setToast("Remediation verified. Exposure and risk counters updated.");
-    }, 2800));
+      setToast({ message: "Remediation verified. Exposure and risk counters updated." });
+    }, 2800);
   }
 
   function reset() {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
+    timers.clear();
     setControls(initialControls()); setSelectedVault("customers_pii"); setTraffic(initialTraffic()); setPaused(false); setQuery(""); setBlockedOnly(false); setPhase("nominal"); setRiskState(initialRisks()); setSelectedRisk("shadow"); setInspection(null); setModal(null); setTab("soc"); sequence.current = 15;
     setAudit([{ time: "14:32:18", title: "Demo reset · all systems nominal", detail: "Default masking restored. Synthetic traffic restarted. Discovery findings reopened." }]);
-    setToast("Demo reset. Ready for your next walkthrough.");
+    setToast({ message: "Demo reset. Ready for your next walkthrough." });
   }
 
   const filteredTraffic = traffic.filter(row => (!blockedOnly || row.status === "BLOCKED") && `${row.path} ${row.partner} ${row.method}`.toLowerCase().includes(query.toLowerCase()));
@@ -189,6 +189,6 @@ export default function Dashboard() {
     {(inspection || modal) && <div className="modal-backdrop" onClick={() => { setInspection(null); setModal(null); }}><section ref={dialogRef} className={`dialog ${inspection ? "inspection-drawer" : ""} ${modal === "audit" ? "audit-dialog" : ""}`} role="dialog" aria-modal="true" aria-labelledby="dialog-title" onClick={e => e.stopPropagation()}><div className="dialog-header"><span><span className="eyebrow">AEGISRAILS / {inspection ? "REQUEST INSPECTOR" : modal === "audit" ? "AUDIT TRAIL" : modal === "patch" ? "AUTONOMOUS PATCH" : "WORKSPACE"}</span><h2 id="dialog-title">{inspection ? "Request inspection" : modal === "audit" ? "Every action, accounted for." : modal === "patch" ? "Devin Pull Request #409" : "Defense without blind spots."}</h2></span><button className="icon-button" aria-label="Close dialog" onClick={() => { setInspection(null); setModal(null); }}><X size={20} /></button></div>
       {inspection ? <><div className="inspect-endpoint"><span className={`method ${inspection.method.toLowerCase()}`}>{inspection.method}</span><code>{inspection.path}</code><Badge tone={inspection.attack ? "red" : "green"}>{inspection.status}</Badge></div><dl className="inspect-metrics"><div><dt>Partner</dt><dd>{inspection.partner}</dd></div><div><dt>Risk score</dt><dd className={inspection.attack ? "red-text" : "green-text"}>{inspection.risk} / 100</dd></div><div><dt>Inspection latency</dt><dd>{inspection.latency} ms</dd></div><div><dt>Scenario time (GST)</dt><dd>{inspection.time}</dd></div></dl><div className="section-caption">ZERO-TRUST VERIFICATION</div>{[{ title: "mTLS certificate", detail: "Partner certificate chain validated", pass: true }, { title: "Object-level authorization (BOLA)", detail: inspection.attack ? "Cross-tenant account access rejected" : "Resource belongs to authenticated tenant", pass: !inspection.attack }, { title: "Object reference checks (IDOR)", detail: inspection.attack ? "Unauthorized object reference blocked" : "Object-level authorization passed", pass: !inspection.attack }, { title: "Velocity & behavior", detail: inspection.attack ? "Bulk export + anomalous offshore transfer" : "Within partner baseline and rate limits", pass: !inspection.attack }].map(check => <div className={`inspection-check ${check.pass ? "" : "failed"}`} key={check.title}>{check.pass ? <ShieldCheck size={19} /> : <ShieldOff size={19} />}<span><strong>{check.title}</strong><small>{check.detail}</small></span><Badge tone={check.pass ? "green" : "red"}>{check.pass ? "PASSED" : "BLOCKED"}</Badge></div>)}<div className="inspect-verdict"><Shield size={18} /><span>{inspection.attack ? "Request blocked by object-level policy. See the incident timeline for quarantine, token revocation, and synthetic honeypot response." : "Request allowed. Active vault policies are applied before the partner receives data."}</span></div><div className="drawer-footnote">Request ID: aegis_req_{String(inspection.id).padStart(8, "0")}<br />This is simulated telemetry, not a real network request.</div></> : modal === "audit" ? <><p className="dialog-description">A local, session-scoped record of policies, incidents, and remediations.</p><div className="audit-events">{audit.map((event, index) => <article key={`${event.title}-${index}`}><span className="audit-event-dot" /><time>{event.time}</time><h3>{event.title}</h3><p>{event.detail}</p></article>)}</div><div className="drawer-footnote">{audit.length} recorded event{audit.length === 1 ? "" : "s"} · Reset Demo clears this audit trail.</div></> : modal === "patch" ? <><Badge tone={phase === "resolved" ? "green" : "cyan"}>{phase === "resolved" ? "MERGED" : "READY FOR APPROVAL"}</Badge><h3 className="patch-modal-title">Fix BOLA & enforce strict tenant_id + velocity limit on /v1/wire/offshore</h3><p className="dialog-description">Devin adds object-level tenant checks and velocity enforcement to the vulnerable wire handler.</p><div className="patch-branch"><GitBranch size={14} /><code>devin/fix-offshore-bola</code><ArrowRight size={13} /><code>main</code></div><CodeDiff /><div className="patch-checks"><CheckCheck size={16} />Authorization checks · tenant isolation · velocity limits</div>{phase === "patch" && <button className="button primary" onClick={mergePatch}><GitMerge size={15} />Approve & Merge Devin Patch</button>}<p className="drawer-footnote">Demonstration code diff. This action does not create or merge a real GitHub PR.</p></> : <><div className="about-logo"><ShieldCheck size={36} /><span>AegisRails</span></div><p className="about-lead">Enterprise Bank API & DSPM Defense</p><p className="dialog-description">A unified CISO command center combining proactive shadow-data discovery with active runtime defense for Open Banking APIs and payment rails. In the UAE, Open Banking is part of the broader Open Finance framework.</p><div className="about-features"><span><Network size={18} />Discover hidden APIs and exposed data</span><span><ShieldCheck size={18} />Mask PII and contain suspicious transfers</span><span><Sparkles size={18} />Preview autonomous Devin remediation</span></div><div className="demo-disclaimer"><TriangleAlert size={18} /><span><strong>Interactive demo, not a connected security product.</strong>All records, traffic, risk estimates, and remediation actions are synthetic. State resets on refresh. No actual bank systems, funds, partner credentials, or GitHub operations are connected.</span></div><Badge tone="neutral">TRACK 2 · CODE, DATA & INFRA RAILS</Badge></>}
     </section></div>}
-    {toast && <div className="toast" role="status"><Check size={17} />{toast}<button aria-label="Dismiss notification" onClick={() => setToast("")}><X size={14} /></button></div>}
+    {toast && <div className="toast" role="status"><Check size={17} />{toast.message}<button aria-label="Dismiss notification" onClick={() => setToast(null)}><X size={14} /></button></div>}
   </div>;
 }
