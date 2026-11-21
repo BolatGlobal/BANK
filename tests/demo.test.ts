@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { eliminatedCount, initialControls, initialRisks, makeTraffic, payloads, remainingExposure, risks, vaults, visiblePayload } from "../src/lib/demo";
+import { discoveredRiskTotal, eliminatedCount, initialControls, initialRisks, makeTraffic, payloads, remainingExposure, risks, vaults, visiblePayload } from "../src/lib/demo";
 
 test("external payloads do not leak originals when masking or tokenization is enabled", () => {
   for (const vault of vaults) {
@@ -22,11 +22,14 @@ test("each remediation removes only its own exposure and increases the eliminate
   const state = initialRisks();
   assert.equal(remainingExposure(state), 12500000);
   assert.equal(eliminatedCount(state), 14);
+  assert.equal(discoveredRiskTotal(state), 16, "preserve the required opening snapshot");
   for (const [index, risk] of risks.entries()) {
     state[risk.id] = "fixing";
+    assert.equal(discoveredRiskTotal(state), eliminatedCount(state) + Object.values(state).filter(v => v !== "secured").length, "every outstanding finding must remain in the total");
     assert.equal(eliminatedCount(state), 14 + index, "in-flight fixes must not count as secured");
     state[risk.id] = "secured";
     assert.equal(eliminatedCount(state), 15 + index);
+    assert.equal(discoveredRiskTotal(state), eliminatedCount(state) + Object.values(state).filter(v => v !== "secured").length);
   }
   assert.equal(remainingExposure(state), 0);
   assert.equal(eliminatedCount(state), 17, "all three findings count, even beyond the original 16-risk baseline");

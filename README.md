@@ -39,6 +39,6 @@ npm run build
 
 Built with Next.js 15 App Router, TypeScript, Tailwind CSS, and Lucide React. State is local to the current browser tab and intentionally resets on page refresh. Telemetry is generated locally every 2.3 seconds and bounded to 60 entries; no runtime external services or fonts are used. API timing labels and threat timestamps are simulated GST scenario values, not wall-clock time.
 
-The initial KPI is the requested **14 / 16**. There are three additional discovery findings; after all three fixes it becomes **17 / 17** rather than silently dropping or capping a remediation. Compliance exposure is a synthetic sum (AED 5.4M + AED 4.1M + AED 3.0M), not a regulatory assessment.
+The initial KPI is the requested **14 / 16**. The first discovery remediation reconciles the inventory to 17 total risks, including all three additional findings. It becomes **17 / 17** only after all three fixes, never 16 / 16 with a finding still open. Compliance exposure is a synthetic sum (AED 5.4M + AED 4.1M + AED 3.0M), not a regulatory assessment.
 
 This is a polished product demonstration, not a production enforcement gateway. The displayed patch is illustrative code and the approval button never calls GitHub. PII strings are fabricated; no personal records or genuine secrets are stored.
