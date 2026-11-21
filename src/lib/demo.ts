@@ -65,8 +65,5 @@ export type RiskStatus = "open" | "fixing" | "secured";
 export type RiskState = Record<RiskId, RiskStatus>;
 export const initialRisks = (): RiskState => ({ shadow: "open", partner: "open", bucket: "open" });
 export function eliminatedCount(state: RiskState) { return 14 + Object.values(state).filter(v => v === "secured").length; }
-// Preserve the requested opening snapshot; the first remediation reconciles
-// its inventory with all three findings from continuous discovery.
-export function discoveredRiskTotal(state: RiskState) { return Object.values(state).every(v => v === "open") ? 16 : 14 + risks.length; }
 export function remainingExposure(state: RiskState) { return risks.reduce((sum, risk) => sum + (state[risk.id] === "secured" ? 0 : risk.exposure), 0); }
 export const aed = (value: number) => value === 0 ? "AED 0" : `AED ${(value / 1000000).toFixed(1)}M`;
