@@ -538,22 +538,26 @@ h1 span { color: var(--text-muted); }
   .graph-insight { padding: 12px; margin-bottom: 14px; }
   .graph-insight small { font-size: 12px; max-width: none; }
   .graph-insight strong { font-size: 15px; }
-  .exposure-card { padding: 14px 18px; }
+  .exposure-card { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; padding: 14px 18px; }
+  .exposure-card .section-caption, .exposure-progress, .exposure-card > small { grid-column: 1 / -1; }
   .exposure-card .section-caption, .exposure-card > small { font-size: 11px; }
-  .exposure-value { margin: 8px 0; }
-  .exposure-card > p { font-size: 12px; margin-bottom: 10px; }
+  .exposure-value { margin: 0; }
+  .exposure-value span { display: block; margin-left: 0; font-size: 11px; }
+  .exposure-card > p { font-size: 12px; line-height: 1.5; margin: 0; align-self: center; }
+  .exposure-card > small { margin-top: 0; }
   .findings-heading { margin: 14px 0 10px; }
   .findings-heading h2 { font-size: 16px; }
   .finding-list { gap: 9px; }
-  .finding-card { position: relative; padding: 12px 14px; }
+  .finding-card { display: grid; grid-template-columns: minmax(0, 1fr) 195px; column-gap: 10px; padding: 10px 14px; }
+  .finding-select, .finding-card h3, .finding-target, .finding-card > p, .fix-confirmation { grid-column: 1 / -1; }
   .finding-category, .finding-select .badge, .finding-index { font-size: 11px; }
-  .finding-card h3 { font-size: 15px; margin-top: 9px; margin-bottom: 5px; }
+  .finding-card h3 { font-size: 15px; margin-top: 6px; margin-bottom: 3px; }
   .finding-target { font-size: 12px; }
-  .finding-card > p { font-size: 12px; line-height: 1.5; margin: 7px 0; }
-  .finding-exposure { margin-top: 9px; padding-right: 205px; min-height: 36px; }
+  .finding-card > p { font-size: 12px; line-height: 1.5; margin: 5px 0; }
+  .finding-exposure { margin-top: 7px; min-height: 36px; grid-column: 1; }
   .finding-exposure > span:first-child { font-size: 12px; }
   .finding-node { display: none; }
-  .fix-button { position: absolute; right: 14px; bottom: 12px; width: 195px; font-size: 13px; margin-top: 0; }
+  .fix-button { grid-column: 2; align-self: end; width: 100%; font-size: 13px; margin-top: 7px; }
   .fix-confirmation { font-size: 11px; }
   .discovery-note { font-size: 11px; line-height: 1.5; }
 }
